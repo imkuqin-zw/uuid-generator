@@ -1,3 +1,5 @@
 proto:
 	@bash ./scripts/genproto.sh
-#	@bash ./scripts/build_doc.sh
+
+copyright:
+	@bash ./scripts/copyright/update-copyright.sh
