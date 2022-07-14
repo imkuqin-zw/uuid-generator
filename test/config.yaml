@@ -1,0 +1,61 @@
+yggdrasil:
+  application:
+    namespace: default
+    version: v1
+    region: "ap-guangzhou"
+    zone: "ap-guangzhou3"
+    campus: ""
+  register: polaris
+  client:
+    com.github.imkuqin_zw.uuid-generator.segment:
+      grpc:
+        target: "polaris://com.github.imkuqin_zw.uuid-generator.snowflake"
+        balancer: "polaris"
+        unaryFilter:
+          - "trace"
+        streamFilter:
+          - "trace"
+    com.github.imkuqin_zw.uuid-generator.snowflake:
+      grpc:
+        target: "polaris://com.github.imkuqin_zw.uuid-generator.snowflake"
+        balancer: "polaris"
+        unaryFilter:
+          - "trace"
+        streamFilter:
+          - "trace"
+  tracer: jaeger
+  logger:
+    level: debug
+    name: zap
+
+jaeger:
+  endpoint: "http://localhost:14268/api/traces"
+  sampler: 0.5
+
+zapLogger:
+  addCaller: true
+  console:
+    enable: true
+
+polaris:
+  global:
+    serverConnector:
+      addresses:
+        - 127.0.0.1:8091
+    statReporter:
+      enable: true
+      chain:
+        - prometheus
+  config:
+    configConnector:
+      addresses:
+        - 127.0.0.1:8093
+
+gorm:
+  uuid:
+    driver: "mysql"
+    singularTable: true
+    dns: "root:12345678@tcp(127.0.0.1)/uuid?charset=utf8&parseTime=True&loc=Local"
+  global:
+    plugins:
+      - "trace"

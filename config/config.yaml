@@ -1,0 +1,64 @@
+yggdrasil:
+  application:
+    namespace: default
+    version: v1
+    region: "ap-guangzhou"
+    zone: "ap-guangzhou3"
+    campus: ""
+  register: polaris
+  server:
+    grpc:
+      unaryFilter:
+        - "trace"
+      streamFilter:
+        - "trace"
+  tracer: jaeger
+  logger:
+    level: debug
+    name: zap
+  configSources:
+    polaris:
+      filenames:
+        - "yggdrasil.yaml"
+
+snowflake:
+  dc: 0
+
+jaeger:
+  endpoint: "http://localhost:14268/api/traces"
+  sampler: 1
+
+zapLogger:
+  addCaller: true
+  console:
+    enable: true
+
+polaris:
+  global:
+    serverConnector:
+      addresses:
+        - 127.0.0.1:8091
+    statReporter:
+      enable: true
+      chain:
+        - prometheus
+  config:
+    configConnector:
+      addresses:
+        - 127.0.0.1:8093
+
+gorm:
+  uuid:
+    driver: "mysql"
+    nameStrategy:
+      singularTable: true
+    #    dsn: "root:12345678@tcp(127.0.0.1)/uuid?charset=utf8&parseTime=True&loc=Local"
+    dsn: "root:nihao123,./@tcp(sh-cynosdbmysql-grp-3r7tf1qw.sql.tencentcdb.com:21903)/uuid?charset=utf8mb4&parseTime=True&loc=Local"
+  global:
+    plugins:
+      - "trace"
+
+etcdv3:
+  snowflake:
+    endpoints:
+      - 127.0.0.1:2379

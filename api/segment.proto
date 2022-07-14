@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package com.github.imkuqin_zw.uuid_generator.api;
+
+option go_package = "github.com/imkuqin-zw/uuid-generator/pkg/genproto/api;api";
+
+import "api/common.proto";
+
+service Segment {
+  rpc FetchNext (FetchSegmentNextReq) returns (api.UUID);
+}
+
+message FetchSegmentNextReq {
+  string tag = 1;
+}
