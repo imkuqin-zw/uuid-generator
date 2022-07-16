@@ -52,8 +52,7 @@ gorm:
     driver: "mysql"
     nameStrategy:
       singularTable: true
-    #    dsn: "root:12345678@tcp(127.0.0.1)/uuid?charset=utf8&parseTime=True&loc=Local"
-    dsn: "root:nihao123,./@tcp(sh-cynosdbmysql-grp-3r7tf1qw.sql.tencentcdb.com:21903)/uuid?charset=utf8mb4&parseTime=True&loc=Local"
+        dsn: "root:12345678@tcp(127.0.0.1)/uuid?charset=utf8&parseTime=True&loc=Local"
   global:
     plugins:
       - "trace"
