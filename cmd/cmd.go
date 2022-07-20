@@ -19,6 +19,7 @@ import (
 	"github.com/imkuqin-zw/uuid-generator/cmd/snowflake"
 	"github.com/imkuqin-zw/yggdrasil/pkg/config"
 	"github.com/imkuqin-zw/yggdrasil/pkg/config/source/file"
+	"github.com/imkuqin-zw/yggdrasil/pkg/log"
 	"github.com/urfave/cli/v2"
 )
 
@@ -38,6 +39,7 @@ func NewServerCmd() *cli.App {
 		Before: func(c *cli.Context) error {
 			err := config.LoadSource(file.NewSource(c.String("config"), false))
 			if err != nil {
+				log.Errorf("fault to load config, err: %+v", err)
 				return err
 			}
 			return nil

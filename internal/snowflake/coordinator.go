@@ -19,10 +19,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/imkuqin-zw/uuid-generator/pkg/etcdv3"
 	"github.com/imkuqin-zw/uuid-generator/pkg/etcdv3lock"
+	"github.com/imkuqin-zw/uuid-generator/pkg/filelock"
 	"github.com/imkuqin-zw/yggdrasil/pkg/config"
 	"github.com/imkuqin-zw/yggdrasil/pkg/log"
 	"github.com/imkuqin-zw/yggdrasil/pkg/utils/xnet"
@@ -46,6 +48,7 @@ type Coordinator interface {
 type Etcdv3Coordinator struct {
 	dc           uint64
 	ip           string
+	port         uint64
 	workerID     uint64
 	maxWorkerLen uint
 	client       *clientv3.Client
@@ -72,6 +75,13 @@ func NewEtcdv3Coordinator() Coordinator {
 }
 
 func (e *Etcdv3Coordinator) GetOrCreateWorker(ctx context.Context) (*Worker, error) {
+	if err := Lock(); err != nil {
+		if errors.Is(err, filelock.ErrLocked) {
+			log.Warn("worker already exists")
+			os.Exit(1)
+		}
+		return nil, err
+	}
 	worker, err := e.loadWorkerByIp(ctx)
 	if err != nil {
 		return nil, err
@@ -129,6 +139,7 @@ func (e *Etcdv3Coordinator) loadWorkerByIp(ctx context.Context) (*Worker, error)
 		if err := json.Unmarshal(res.Kvs[0].Value, worker); err != nil {
 			return nil, errors.WithStack(err)
 		}
+
 		return worker, nil
 	}
 	return nil, nil

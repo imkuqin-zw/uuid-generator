@@ -31,10 +31,6 @@ import (
 	_ "github.com/imkuqin-zw/yggdrasil/pkg/server/grpc/trace"
 )
 
-const (
-	appName = "com.github.imkuqin_zw.uuid-generator"
-)
-
 func main() {
 	initConfig()
 	app := cmd.NewServerCmd()

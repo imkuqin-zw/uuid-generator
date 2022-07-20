@@ -7,7 +7,7 @@ require (
 	github.com/imkuqin-zw/yggdrasil v0.1.1
 	github.com/imkuqin-zw/yggdrasil-gorm v0.0.0-20220706050511-cecf684b79bf
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.7.2
+	github.com/stretchr/testify v1.8.0
 	github.com/urfave/cli/v2 v2.11.0
 	go.etcd.io/etcd/client/v3 v3.5.4
 	go.uber.org/atomic v1.7.0
