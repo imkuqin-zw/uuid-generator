@@ -1,6 +1,6 @@
-# uuid-generator 全局唯一ID生成服务
+# uuid-generator 唯一ID生成服务
 
-全局唯一ID生成器服务
+唯一ID生成器服务
 
 ## 特点
 * 已支持
