@@ -7,7 +7,6 @@ import (
 )
 
 func Lock() error {
-	// lock, err := filelock.New("C:\\Users\\Default\\AppData\\Local\\Temp\\github.com.imkuqin_zw.uuid_generator.snowflake.process.lock")
 	lock, err := filelock.New("C:\\ProgramData\\github\\imkuqin_zw\\uuid_generator_snowflake_process.lock")
 	if err != nil {
 		return errors.WithStack(err)

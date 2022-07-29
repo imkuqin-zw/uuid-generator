@@ -57,7 +57,7 @@ type Etcdv3Coordinator struct {
 
 func NewEtcdv3Coordinator() Coordinator {
 	dc := uint64(config.GetInt64("snowflake.dc", 0))
-	client, err := etcdv3.StdConfig("snowflake").Build()
+	client, err := etcdv3.StdConfig().Build()
 	if err != nil {
 		return nil
 	}
