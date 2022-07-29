@@ -8,6 +8,7 @@ yggdrasil:
   register: polaris
   server:
     grpc:
+      port: 30008
       unaryFilter:
         - "trace"
       streamFilter:
@@ -58,6 +59,8 @@ gorm:
       - "trace"
 
 etcdv3:
-  snowflake:
-    endpoints:
-      - 127.0.0.1:2379
+  endpoints:
+    - 127.0.0.1:2379
+
+seqsvr:
+  setID: 1

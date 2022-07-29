@@ -3,3 +3,6 @@ proto:
 
 copyright:
 	@bash ./scripts/copyright/update-copyright.sh
+
+build:
+	@go build

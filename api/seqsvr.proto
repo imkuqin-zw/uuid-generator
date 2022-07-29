@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package com.github.imkuqin_zw.uuid_generator.api;
+
+option go_package = "github.com/imkuqin-zw/uuid-generator/pkg/genproto/api;api";
+
+import "yggdrasil/error/reason.proto";
+import "api/common.proto";
+
+service Alloc {
+  rpc FetchNext (FetchSeqNextReq) returns (api.UUID);
+}
+
+message FetchSeqNextReq {
+  uint32 ID = 1;
+}
+
+//message GetRouterReq {
+//  uint64 version = 1;
+//}
+//
+//message Router {
+//  uint64 version = 1;
+//  repeated Set sets = 2;
+//}
+//
+//message Set {
+//  uint32 ID = 1;
+//  uint32 size = 2;
+//  uint32 sectionSize = 3;
+//  repeated AllocNode nodes = 4;
+//}
+//
+//message AllocNode {
+//  string IP = 1;
+//  repeated string endpoints = 2;
+//  map<string, string> metadata = 3;
+//  repeated uint32 sections = 4;
+//}
+
+enum SeqsvrErrReason {
+  option (yggdrasil.error.default_reason) = 500;
+  // Do not use this default value.
+  ERROR_REASON_UNSPECIFIED = 0;
+
+  SERVICE_PAUSE = 1 [(yggdrasil.error.code) = 9];
+  NOT_FOUND_SEQUENCE = 2 [(yggdrasil.error.code) = 9];
+}

@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"github.com/imkuqin-zw/uuid-generator/cmd/segment"
+	"github.com/imkuqin-zw/uuid-generator/cmd/seqsvr"
 	"github.com/imkuqin-zw/uuid-generator/cmd/snowflake"
 	"github.com/imkuqin-zw/yggdrasil/pkg/config"
 	"github.com/imkuqin-zw/yggdrasil/pkg/config/source/file"
@@ -56,6 +57,7 @@ func registerCommands(app *cli.App) {
 		Subcommands: []*cli.Command{
 			segment.NewCmd(),
 			snowflake.NewCmd(),
+			seqsvr.NewCmd(),
 		},
 	}
 	app.Commands = append(app.Commands, svrCmd)

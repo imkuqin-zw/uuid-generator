@@ -15,7 +15,6 @@
 package etcdv3
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/imkuqin-zw/yggdrasil/pkg/config"
@@ -40,8 +39,8 @@ type Config struct {
 	dialOptions []grpc.DialOption
 }
 
-func StdConfig(name string) *Config {
-	return RawConfig(fmt.Sprintf("%s.%s", "etcdv3", name))
+func StdConfig() *Config {
+	return RawConfig("etcdv3")
 }
 
 func RawConfig(key string) *Config {
