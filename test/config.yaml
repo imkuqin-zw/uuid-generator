@@ -13,16 +13,20 @@ yggdrasil:
         balancer: "polaris"
         unaryFilter:
           - "trace"
+          - "log"
         streamFilter:
           - "trace"
+          - "log"
     com.github.imkuqin_zw.uuid-generator.snowflake:
       grpc:
         target: "polaris://com.github.imkuqin_zw.uuid-generator.snowflake"
         balancer: "polaris"
         unaryFilter:
           - "trace"
+          - "log"
         streamFilter:
           - "trace"
+          - "log"
   tracer: jaeger
   logger:
     level: debug
@@ -59,3 +63,7 @@ gorm:
   global:
     plugins:
       - "trace"
+
+etcdv3:
+  endpoints:
+    - 127.0.0.1:2379

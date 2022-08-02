@@ -11,16 +11,18 @@ yggdrasil:
       port: 30008
       unaryFilter:
         - "trace"
+        - "log"
       streamFilter:
         - "trace"
+        - "log"
   tracer: jaeger
   logger:
     level: debug
     name: zap
   configSources:
-    polaris:
-      filenames:
-        - "yggdrasil.yaml"
+#    polaris:
+#      filenames:
+#        - "yggdrasil.yaml"
 
 snowflake:
   dc: 0

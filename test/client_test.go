@@ -16,9 +16,13 @@ package test
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
+	"github.com/imkuqin-zw/uuid-generator/internal/seqsvr/proto"
+	"github.com/imkuqin-zw/uuid-generator/pkg/etcdv3"
 	"github.com/imkuqin-zw/uuid-generator/pkg/genproto/api"
 	grpcimpl "github.com/imkuqin-zw/uuid-generator/pkg/genproto/api/grpc"
 	"github.com/imkuqin-zw/yggdrasil"
@@ -34,6 +38,7 @@ import (
 	"github.com/imkuqin-zw/yggdrasil/pkg/log"
 	_ "github.com/imkuqin-zw/yggdrasil/pkg/server/governor"
 	_ "github.com/imkuqin-zw/yggdrasil/pkg/server/grpc/trace"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func TestSegmentClient(t *testing.T) {
@@ -84,4 +89,59 @@ func TestSnowflakeClient(t *testing.T) {
 			ticker.Reset(time.Second * 2)
 		}
 	}
+}
+
+func TestEtcd(t *testing.T) {
+	if err := config.LoadSource(file.NewSource("./config.yaml", false)); err != nil {
+		log.Fatal(err)
+	}
+	client, err := etcdv3.StdConfig().Build()
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*5)
+	defer cancel()
+
+	routerKey := "/router"
+	// routerVersionKey := fmt.Sprintf("%s/version", routerKey)
+	allocKey := fmt.Sprintf("%s/sets", routerKey)
+
+	nodes := make(map[string]*proto.AllocNode)
+	ip := 52
+	for i := 1; i < 20000000; i += 10000000 {
+		setKey := fmt.Sprintf("%s/%d_%d_%d", allocKey, i, 10000000, 100000)
+		for j := i; j < i+10000000; j += 5000000 {
+			nodeKey := fmt.Sprintf("%s/192.168.3.%d", setKey, ip)
+			node := &proto.AllocNode{
+				Endpoints: []string{fmt.Sprintf("grpc://192.168.3.%d:32323", ip)},
+			}
+			ip++
+			for k := j; k < j+5000000; k += 100000 {
+				node.Sections = append(node.Sections, uint32(k))
+			}
+			nodes[nodeKey] = node
+		}
+	}
+
+	for key, node := range nodes {
+		val, _ := json.Marshal(node)
+		client.Do(ctx, clientv3.OpPut(key, string(val)))
+	}
+
+	// txn := client.Txn(ctx).
+	// 	If(clientv3.Compare(clientv3.Value(routerVersionKey), ">", fmt.Sprintf("%d", 0))).
+	// 	Then(clientv3.OpGet(routerKey, clientv3.WithPrefix()))
+	// txnRes, err := txn.Commit()
+	// if err != nil {
+	// 	t.Fatal(err)
+	// 	return
+	// }
+	// for _, item := range txnRes.Responses {
+	// 	rangeRes := item.GetResponseRange()
+	// 	for _, kv := range rangeRes.Kvs {
+	// 		fmt.Println(string(kv.Key))
+	// 		fmt.Println(string(kv.Value))
+	// 	}
+	// }
 }

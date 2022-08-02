@@ -35,6 +35,7 @@ func main() {
 	initConfig()
 	app := cmd.NewServerCmd()
 	if err := app.Run(os.Args); err != nil {
+		log.ErrorFiled("app run error", log.Err(err))
 		os.Exit(-1)
 	}
 }
